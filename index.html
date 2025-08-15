@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Standby Mode</title>
+    <title>Standby</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="standby-container">
-        <div id="left-panel">
+        <div id="left-panel" class="panel">
             <div id="clock">
                 <span id="hours">00</span><span id="separator">:</span><span id="minutes">00</span>
             </div>
+            <div id="date"></div>
         </div>
-        <div id="right-panel">
+        <div id="right-panel" class="panel">
             <div id="weather">
-                <div id="weather-icon"></div>
                 <div id="temperature">--°</div>
                 <div id="weather-description">Loading...</div>
-            </div>
-            <div id="battery">
-                <div id="battery-icon"></div>
-                <div id="battery-level">--%</div>
+                <div id="weather-icon"></div>
             </div>
         </div>
     </div>
