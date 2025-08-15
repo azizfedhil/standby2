@@ -1,0 +1,105 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    transition: transform 0.1s linear;
+}
+
+#standby-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#left-panel, #right-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#clock {
+    font-size: 12vw;
+    font-weight: 200;
+}
+
+#separator {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+#weather {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+#weather-icon {
+    width: 8vw;
+    height: 8vw;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 20px;
+}
+
+#temperature {
+    font-size: 6vw;
+    font-weight: 300;
+}
+
+#weather-description {
+    font-size: 2vw;
+    font-weight: 300;
+}
+
+#battery {
+    display: flex;
+    align-items: center;
+}
+
+#battery-icon {
+    width: 6vw;
+    height: 3vw;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    position: relative;
+    margin-right: 15px;
+}
+
+#battery-icon::after {
+    content: '';
+    position: absolute;
+    right: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 1.5vw;
+    background-color: #fff;
+    border-radius: 0 2px 2px 0;
+}
+
+#battery-level-indicator {
+    height: 100%;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+#battery-level {
+    font-size: 3vw;
+    font-weight: 300;
+}
