@@ -1,105 +1,65 @@
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-    transition: transform 0.1s linear;
+const hoursElement = document.getElementById('hours');
+const minutesElement = document.getElementById('minutes');
+const dateElement = document.getElementById('date');
+const weatherIconElement = document.getElementById('weather-icon');
+const temperatureElement = document.getElementById('temperature');
+const weatherDescriptionElement = document.getElementById('weather-description');
+
+function updateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    hoursElement.textContent = hours;
+    minutesElement.textContent = minutes;
+
+    const options = { weekday: 'long', month: 'long', day: 'numeric' };
+    dateElement.textContent = now.toLocaleDateString(undefined, options);
 }
 
-#standby-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-}
+async function updateWeather() {
+    // IMPORTANT: Replace with your own API key from a weather provider like OpenWeatherMap
+    const apiKey = 'YOUR_API_KEY';
+    const city = 'Cupertino'; // Change to your desired city
 
-#left-panel, #right-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+    // You can find your city ID to be more precise, or use q= for city name
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-#clock {
-    font-size: 12vw;
-    font-weight: 200;
-}
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Weather data not available');
+        }
+        const data = await response.json();
 
-#separator {
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    50% {
-        opacity: 0;
+        const iconCode = data.weather[0].icon;
+        weatherIconElement.style.backgroundImage = `url('https://openweathermap.org/img/wn/${iconCode}@4x.png')`;
+        temperatureElement.textContent = `${Math.round(data.main.temp)}°`;
+        weatherDescriptionElement.textContent = data.weather[0].description;
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+        weatherDescriptionElement.textContent = 'Weather Error';
     }
 }
 
-#weather {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
+function pixelRotation() {
+    let x = 0;
+    let y = 0;
+    const maxOffset = 4; // pixels
+
+    setInterval(() => {
+        x = Math.floor(Math.random() * (maxOffset * 2 + 1)) - maxOffset;
+        y = Math.floor(Math.random() * (maxOffset * 2 + 1)) - maxOffset;
+        document.body.style.transform = `translate(${x}px, ${y}px)`;
+    }, 5000); // 5 seconds
 }
 
-#weather-icon {
-    width: 8vw;
-    height: 8vw;
-    background-size: contain;
-    background-repeat: no-repeat;
-    margin-right: 20px;
-}
+// Initial calls
+updateTime();
+updateWeather();
+pixelRotation();
 
-#temperature {
-    font-size: 6vw;
-    font-weight: 300;
-}
+// Update time every second
+setInterval(updateTime, 1000);
 
-#weather-description {
-    font-size: 2vw;
-    font-weight: 300;
-}
-
-#battery {
-    display: flex;
-    align-items: center;
-}
-
-#battery-icon {
-    width: 6vw;
-    height: 3vw;
-    border: 2px solid #fff;
-    border-radius: 5px;
-    position: relative;
-    margin-right: 15px;
-}
-
-#battery-icon::after {
-    content: '';
-    position: absolute;
-    right: -7px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 1.5vw;
-    background-color: #fff;
-    border-radius: 0 2px 2px 0;
-}
-
-#battery-level-indicator {
-    height: 100%;
-    background-color: #fff;
-    border-radius: 3px;
-}
-
-#battery-level {
-    font-size: 3vw;
-    font-weight: 300;
-}
+// Update weather every 15 minutes (900000 milliseconds)
+setInterval(updateWeather, 900000);
