@@ -1,93 +1,93 @@
-const hoursElement = document.getElementById('hours');
-const minutesElement = document.getElementById('minutes');
-const weatherIconElement = document.getElementById('weather-icon');
-const temperatureElement = document.getElementById('temperature');
-const weatherDescriptionElement = document.getElementById('weather-description');
-const batteryIconElement = document.getElementById('battery-icon');
-const batteryLevelElement = document.getElementById('battery-level');
-const container = document.getElementById('standby-container');
-
-function updateTime() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    hoursElement.textContent = hours;
-    minutesElement.textContent = minutes;
+body {
+    background-color: #1c1c1e;
+    color: #ffffff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
 }
 
-async function updateWeather() {
-    // IMPORTANT: Replace with your own API key from a weather provider
-    const apiKey = 'YOUR_API_KEY';
-    const city = 'New York'; // Change to your desired city
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+#standby-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 5vw;
+    box-sizing: border-box;
+    gap: 4vw;
+}
 
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+.panel {
+    background-color: #2c2c2e;
+    border-radius: 30px;
+    padding: 4vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    height: 60vh;
+    max-width: 45%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
 
-        const iconCode = data.weather[0].icon;
-        weatherIconElement.style.backgroundImage = `url('http://openweathermap.org/img/wn/${iconCode}@2x.png')`;
-        temperatureElement.textContent = `${Math.round(data.main.temp)}°`;
-        weatherDescriptionElement.textContent = data.weather[0].main;
-    } catch (error) {
-        console.error('Error fetching weather data:', error);
-        weatherDescriptionElement.textContent = 'Weather Error';
+#clock {
+    font-size: 15vw;
+    font-weight: 700;
+    line-height: 1;
+    color: #ff9500;
+}
+
+#separator {
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.2;
     }
 }
 
-async function updateBattery() {
-    try {
-        const battery = await navigator.getBattery();
-
-        const updateBatteryUI = () => {
-            const level = Math.floor(battery.level * 100);
-            batteryLevelElement.textContent = `${level}%`;
-
-            const batteryLevelIndicator = document.createElement('div');
-            batteryLevelIndicator.id = 'battery-level-indicator';
-            batteryLevelIndicator.style.width = `${level}%`;
-            batteryIconElement.innerHTML = '';
-            batteryIconElement.appendChild(batteryLevelIndicator);
-
-            if (battery.charging) {
-                batteryLevelIndicator.style.backgroundColor = '#4cd964'; // Green when charging
-            } else if (level <= 20) {
-                batteryLevelIndicator.style.backgroundColor = '#ff3b30'; // Red when low
-            } else {
-                batteryLevelIndicator.style.backgroundColor = '#fff';
-            }
-        };
-
-        updateBatteryUI();
-
-        battery.addEventListener('chargingchange', updateBatteryUI);
-        battery.addEventListener('levelchange', updateBatteryUI);
-    } catch (error) {
-        console.error('Battery API not supported:', error);
-        batteryLevelElement.textContent = 'N/A';
-    }
+#date {
+    font-size: 2.5vw;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
 }
 
-function pixelRotation() {
-    let x = 0;
-    let y = 0;
-    const maxOffset = 5; // pixels
-
-    setInterval(() => {
-        x = Math.floor(Math.random() * (maxOffset * 2 + 1)) - maxOffset;
-        y = Math.floor(Math.random() * (maxOffset * 2 + 1)) - maxOffset;
-        document.body.style.transform = `translate(${x}px, ${y}px)`;
-    }, 5000); // 5 seconds
+#weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-// Initial calls
-updateTime();
-updateWeather();
-updateBattery();
-pixelRotation();
+#temperature {
+    font-size: 10vw;
+    font-weight: 200;
+    line-height: 1.1;
+}
 
-// Update time every second
-setInterval(updateTime, 1000);
+#weather-description {
+    font-size: 2.5vw;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: capitalize;
+    margin-top: 5px;
+}
 
-// Update weather every 15 minutes
-setInterval(updateWeather, 900000);
+#weather-icon {
+    width: 12vw;
+    height: 12vw;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 15px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+}
